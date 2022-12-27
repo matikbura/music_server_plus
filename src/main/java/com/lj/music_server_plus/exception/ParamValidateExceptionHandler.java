@@ -2,6 +2,7 @@ package com.lj.music_server_plus.exception;
 
 import com.lj.music_server_plus.common.result.Result;
 import com.lj.music_server_plus.common.result.ResultCode;
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,7 @@ public class ParamValidateExceptionHandler {
      * @return ResponseResult
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ExceptionHandler({MissingServletRequestParameterException.class, UnexpectedTypeException.class,IllegalStateException.class})
     public Result<Void> parameterMissingExceptionHandler(MissingServletRequestParameterException e) {
         log.error("", e);
         return Result.failure(ResultCode.REQUEST_PARAM_ERROR.getCode(), "请求参数 " + e.getParameterName() + " 不能为空");
@@ -75,6 +76,17 @@ public class ParamValidateExceptionHandler {
         }
         return Result.failure(ResultCode.REQUEST_PARAM_ERROR);
     }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthException.class)
+    public Result<Void> authExceptionHandler(AuthException e) {
+        return Result.failure(ResultCode.AUTHENTICATION_FAILED.getCode(), e.getMessage());
+    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(BusinessException.class)
+    public Result<Void> businessExceptionHandler(BusinessException e) {
+        return Result.failure(ResultCode.REQUEST_PARAM_ERROR.getCode(), e.getMessage());
+    }
+
     //拦截其他请求
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)

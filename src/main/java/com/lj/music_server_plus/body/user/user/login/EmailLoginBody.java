@@ -1,4 +1,4 @@
-package com.lj.music_server_plus.query.user.login;
+package com.lj.music_server_plus.body.user.user.login;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Schema(description = "邮箱登录请求参数")
 @Data
-public class EmailLoginRequestBody {
+public class EmailLoginBody {
     @Schema(description = "邮箱",requiredMode = Schema.RequiredMode.REQUIRED)
     @Email(message = "邮箱格式不正确")
     private String email;

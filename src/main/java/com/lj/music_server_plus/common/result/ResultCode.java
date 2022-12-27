@@ -13,7 +13,8 @@ public enum ResultCode {
 
     //成功提示码
     SUCCESS(20000, "成功"),
-
+    //校验失败提示码
+    AUTHENTICATION_FAILED(40001, "认证失败"),
     //自定义失败信息
     FAILURE(50000, "失败"),
 

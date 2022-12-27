@@ -3,6 +3,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
+import com.lj.music_server_plus.enums.Role;
 import com.lj.music_server_plus.exception.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,10 +33,10 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true;
         }
         // 获取token中的Role
-        String role=null;
+        String roleText=null;
         try {
             JWT jwt = JWTUtil.parseToken(token);
-            role = (String)jwt .getPayload("role");
+            roleText = (String)jwt .getPayload("roleText");
         } catch (Exception e) {
             System.out.println(request.getRequestURI());
             throw new AuthException("token无效，请重新登录");
@@ -43,7 +44,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         // 请求路径是否包含admin
         String requestURI = request.getRequestURI();
         if (requestURI.contains("admin")) {
-            if (!"admin".equals(role)) {
+            if (!Role.ADMIN.getText().equals(roleText)) {
                 throw new AuthException("权限不足");
             }
         }
